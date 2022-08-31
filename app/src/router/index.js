@@ -18,9 +18,22 @@ export default new VueRouter({
       meta:{show:true}
     },
     {
-      path: "/search",
+      path: "/search:keyword?",
       component: Search,
-      meta:{show:true}
+      meta:{show:true},
+      name:"search",
+      //路由组件能不能传递props
+      //布尔写法：params
+      // props:true,
+      //对象写法，额外的给路由组件传递一些props
+      // props:{a:1,b:2},
+      //函数写法：可以通过params参数、query参数，通过query传递给路由组件
+      props: ($route) => {
+        return {keyword:$route.params.keyword,k:$route.query.k}
+      }
+
+
+
     },
     {
       path: "/login",

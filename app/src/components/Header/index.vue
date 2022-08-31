@@ -36,6 +36,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
             搜索
@@ -51,7 +52,9 @@ export default {
   name: "AppIndex",
 
   data() {
-    return {};
+    return {
+      keyword:'',
+    };
   },
 
   mounted() {},
@@ -59,7 +62,13 @@ export default {
   methods: {
     //搜索按钮的回调函数，需要向search路由进行跳转
     goSearch(){
-        this.$router.push('./search');
+      //路由传参：
+      //第一种字符串形式：
+        // this.$router.push('/search' + this.keyword + '?k=' + this.keyword.toUpperCase());
+      //第二种：模板字符串
+      // this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
+      //第三种：使用对象
+      this.$router.push({name:"search",params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
     }
   },
 };
