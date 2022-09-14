@@ -8,7 +8,7 @@ module.exports = defineConfig({
       //代理服务器解决跨域
       "/api": {
         target: "http://gmall-h5-api.atguigu.cn",
-        pathRewrite: { "^/api": "" },
+        // pathRewrite: { "^/api": "" },
       },
     },
   },

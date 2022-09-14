@@ -8,6 +8,11 @@
         <Like/>
         <Floor/>
         <Brand/>
+
+
+        <!-- <button @click="add">点击我加上1</button>
+        <span>仓库的数组{{count}}</span>
+        <button @click='decr'>点击我减去1</button> -->
     </div>
 </template>
 
@@ -19,6 +24,8 @@ import Rank from '@/pages/Home/Rank';
 import Like from '@/pages/Home/Like';
 import Floor from '@/pages/Home/Floor';
 import Brand from '@/pages/Home/Brand';
+
+import {mapState} from 'vuex';
 
 export default {
     name: 'AppIndex',
@@ -36,13 +43,22 @@ export default {
             
         };
     },
-
+    computed:{
+        // // 注意mapState和mapGetters是映射在计算属性里面的，而mapActions和mapMutations是映射在methods里面的
+        // ...mapState(['count'])
+    },
     mounted() {
         
     },
 
     methods: {
-        
+        // add(){
+        //     //派发actions
+        //     this.$store.dispatch('add');
+        // },
+        // decr(){
+        //     this.$store.dispatch('decr');
+        // }
     },
 };
 </script>
