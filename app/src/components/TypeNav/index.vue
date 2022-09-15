@@ -2,20 +2,30 @@
   <div class="type-nav">
     <div class="container">
       <!-- 事件的委派 -->
-      <div>
-        <h2 class="all" @mouseleave="leaveIndex">全部商品分类</h2>
+      <div @mouseleave="leaveIndex">
+        <h2 class="all">全部商品分类</h2>
+        <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <!-- 利用事件的委派 + 编程式导航实现路由的跳转与传递参数 -->
+          <div class="all-sort-list2" @click="goSearch">
+            <!-- 一级分类 -->
             <div
               class="item"
               v-for="(c1, index) in categoryList"
               :key="c1.categoryId"
               :class="{ cur: currentIndex == index }"
             >
-              <h3 @mouseenter="changeIndex(index)" >
-                <a href="">{{ c1.categoryName }}</a>
+              <h3 @mouseenter="changeIndex(index)">
+                <!-- <a href="">{{ c1.categoryName }}</a> -->
+                <!-- <router-link to="/search">{{c1.categoryName}}</router-link> -->
+                <!-- <a @click="goSearch">{{c1.categoryName}}</a> -->
+                <a>{{c1.categoryName}}</a>
               </h3>
-              <div class="item-list clearfix">
+              <!-- 二级分类 -->
+              <div
+                class="item-list clearfix"
+                :style="{ display: currentIndex == index ? 'block' : 'none' }"
+              >
                 <div
                   class="subitem"
                   v-for="(c2, index) in c1.categoryChild"
@@ -23,14 +33,21 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <!-- <a href="">{{ c2.categoryName }}</a> -->
+                      <!-- <router-link to="/search">{{c2.categoryName}}</router-link> -->
+                      <!-- <a @click="goSearch">{{c2.categoryName}}</a> -->
+                      <a>{{c2.categoryName}}</a>
                     </dt>
                     <dd>
+                      <!-- 三级分类 -->
                       <em
                         v-for="(c3, index) in c2.categoryChild"
                         :key="c3.categoryId"
                       >
-                        <a href=""> {{ c3.categoryName }}</a>
+                        <!-- <a href=""> {{ c3.categoryName }}</a> -->
+                        <!-- <router-link to="/search">{{c3.categoryName}}</router-link> -->
+                        <!-- <a @click="goSearch">{{c3.categoryName}}</a> -->
+                        <a>{{c3.categoryName}}</a>
                       </em>
                     </dd>
                   </dl>
@@ -57,6 +74,10 @@
 
 <script>
 import { mapState } from "vuex";
+//这种引入方式：是吧lodash全部功能函数引入
+// import _ from "lodash";
+// console.log(_);
+import throttle from "lodash/throttle";
 
 export default {
   name: "TypeNav",
@@ -86,16 +107,42 @@ export default {
   //这里说一下，虽然办法很多，但是老师这种方式是完全符合Vue开发理念的，完全使用数据去驱动DOM或者样式。
 
   methods: {
-    //鼠标进入修改响应式数据currentIndex属性
-    changeIndex(index) {
+    // //鼠标进入修改响应式数据currentIndex属性
+    // changeIndex(index) {
+    //   //index：鼠标上某一个一级分类的元素的索引值
+    //   //正常情况（用户慢慢操作）：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
+    //   //非正常情况（用户的操作很快）：本身全部的一级分类都应该触发鼠标进入事件，但是经过测试，只有部分h3触发了
+    //   //就是由于用户行为过快，导师浏览器反应不过来。如果当前回调函数中有一些大量业务，有可能出现卡顿现象。
+
+    //   this.currentIndex = index;
+
+    // },
+
+
+    //throttle回调函数别用箭头函数，可能出现上下文this
+
+    changeIndex:throttle(function (index) {
       //index：鼠标上某一个一级分类的元素的索引值
+      //正常情况（用户慢慢操作）：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
+      //非正常情况（用户的操作很快）：本身全部的一级分类都应该触发鼠标进入事件，但是经过测试，只有部分h3触发了
+      //就是由于用户行为过快，导师浏览器反应不过来。如果当前回调函数中有一些大量业务，有可能出现卡顿现象。
+
       this.currentIndex = index;
-    },
+    }, 50),
+
     //以及分了鼠标移除的事件回调
     leaveIndex() {
       //鼠标移出currentIndex，变为-1
       this.currentIndex = -1;
     },
+
+    //进行路由跳转的方法
+    goSearch(){
+      //最好的方法：编程式导航 + 事件的委派
+      //如果用事件的委派存在一些问题：事件委派是吧全部的子节点【h3、dt、dl、em】的事件委派给父亲节点。点击a标签的时候才能确定跳转。
+      // 1.怎么确保点击的一定是a标签 2.如何获取参数【1、2、3级分类的产品的名字、id】
+      this.$router.push('/search');
+    }
   },
 };
 </script>
