@@ -19,7 +19,11 @@
                 <!-- <a href="">{{ c1.categoryName }}</a> -->
                 <!-- <router-link to="/search">{{c1.categoryName}}</router-link> -->
                 <!-- <a @click="goSearch">{{c1.categoryName}}</a> -->
-                <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
               </h3>
               <!-- 二级分类 -->
               <div
@@ -36,7 +40,11 @@
                       <!-- <a href="">{{ c2.categoryName }}</a> -->
                       <!-- <router-link to="/search">{{c2.categoryName}}</router-link> -->
                       <!-- <a @click="goSearch">{{c2.categoryName}}</a> -->
-                      <a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
                     </dt>
                     <dd>
                       <!-- 三级分类 -->
@@ -47,7 +55,11 @@
                         <!-- <a href=""> {{ c3.categoryName }}</a> -->
                         <!-- <router-link to="/search">{{c3.categoryName}}</router-link> -->
                         <!-- <a @click="goSearch">{{c3.categoryName}}</a> -->
-                        <a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -118,10 +130,9 @@ export default {
 
     // },
 
-
     //throttle回调函数别用箭头函数，可能出现上下文this
 
-    changeIndex:throttle(function (index) {
+    changeIndex: throttle(function (index) {
       //index：鼠标上某一个一级分类的元素的索引值
       //正常情况（用户慢慢操作）：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
       //非正常情况（用户的操作很快）：本身全部的一级分类都应该触发鼠标进入事件，但是经过测试，只有部分h3触发了
@@ -137,36 +148,38 @@ export default {
     },
 
     //进行路由跳转的方法
-    goSearch(event){
+    goSearch(event) {
       //最好的方法：编程式导航 + 事件的委派
       //如果用事件的委派存在一些问题：事件委派是吧全部的子节点【h3、dt、dl、em】的事件委派给父亲节点。点击a标签的时候才能确定跳转。
       // 1.怎么确保点击的一定是a标签 2.即使确定点击的是a标签，如何区分一级二级三级标签。如何获取参数【1、2、3级分类的产品的名字、id】
-      
+
       //第一个问题：把子节点加上自定义属性data-categoryName，其余的子节点没有
       //
-      let element = event.target;
+      let node = event.target;
       //获取到当前触发这个事件的节点【h3、a、dt、dl】，需要带有categoryName的即节点【一定是a标签】
       //节点有一个属性dataset属性，可以获取节点的自定义属性与属性值
-      let {categoryname,category1id,category2id,category3id} = element.dataset;
+
+      let { categoryname, category1id, category2id, category3id } =
+        node.dataset;
       //如果标签身上有categoryname的属性那他一定是a标签
-      if(categoryname){
+      if (categoryname) {
         //一级二级三级分类的a标签
-        let location = {name:'search'};
-        let query = {categoryName:categoryname};
-        if(category1id){
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
+        if (category1id) {
           query.category1Id = category1id;
-        }else if(category2id){
+        } else if (category2id) {
           query.category2Id = category2id;
-        }else{
+        } else {
           query.category3Id = category3id;
         }
         //整理完参数
         // console.log(location,query);
         location.query = query;
         //进行了路由的跳转了
-         this.$router.push(location);
+        this.$router.push(location);
       }
-    }
+    },
   },
 };
 </script>
