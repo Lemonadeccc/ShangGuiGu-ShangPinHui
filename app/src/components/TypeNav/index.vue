@@ -2,10 +2,12 @@
   <div class="type-nav">
     <div class="container">
       <!-- 事件的委派 -->
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveIndex" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
-        <div class="sort">
+        <!-- 过渡动画 -->
+        <transition name="sort">
+          <div class="sort" v-show="show">
           <!-- 利用事件的委派 + 编程式导航实现路由的跳转与传递参数 -->
           <div class="all-sort-list2" @click="goSearch">
             <!-- 一级分类 -->
@@ -68,6 +70,7 @@
             </div>
           </div>
         </div>
+        </transition>
       </div>
 
       <nav class="nav">
@@ -99,12 +102,19 @@ export default {
     return {
       //存储用户鼠标移上哪一个以及分类
       currentIndex: -1,
+      show:true,
     };
   },
 
   mounted() {
-    //通知Vuex发送请求，获取数据，储存在仓库当中
-    this.$store.dispatch("categoryList");
+    // //通知Vuex发送请求，获取数据，储存在仓库当中
+    // this.$store.dispatch("categoryList");
+
+    //当组件挂在完毕让show变臣false
+    //如果不是Home路由组件，将typeNav进行隐藏
+    if(this.$route.path != '/home'){
+      this.show = false;
+    };
   },
   computed: {
     ...mapState({
@@ -145,6 +155,10 @@ export default {
     leaveIndex() {
       //鼠标移出currentIndex，变为-1
       this.currentIndex = -1;
+      //判断是search路由组件的时候才会执行
+      if(this.$route.path != '/home'){
+        this.show = false;
+      }
     },
 
     //进行路由跳转的方法
@@ -175,11 +189,23 @@ export default {
         }
         //整理完参数
         // console.log(location,query);
-        location.query = query;
+
+        //判断：如果路由跳转的时候，带有Params参数，捎带着传递进去
+        if(this.$route.params){
+          location.params = this.$route.params;
+          location.query = query;
         //进行了路由的跳转了
         this.$router.push(location);
+        }
+        
       }
     },
+    //当鼠一如的时候，让商品分类列表进行展示
+    enterShow(){
+      if(this.$route.path != '/home'){
+        this.show = true;
+      }
+    }
   },
 };
 </script>
@@ -309,6 +335,22 @@ export default {
           background: skyblue;
         }
       }
+    }
+    //过渡动画的样式
+    //过渡动画开始状态（进入）
+    .sort.enter{
+      height:0px;
+      // transform:rotate(0deg);
+    }
+    //过渡动画的结束状态（进入）
+    .sort-enter-to{
+      height: 461px;
+      // transform:rotate(360deg);
+    }
+    //定义动画的实践
+    .sort-enter-active{
+      transition: all .5s linear; 
+      overflow: hidden;
     }
   }
 }

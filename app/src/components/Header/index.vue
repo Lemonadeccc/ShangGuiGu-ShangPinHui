@@ -68,7 +68,14 @@ export default {
       //第二种：模板字符串
       // this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
       //第三种：使用对象
-      this.$router.push({name:"search",params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
+      if(this.$route.query){
+        // this.$router.push({name:"search",params:{keyword:this.keyword || undefined},query:{k:this.keyword.toUpperCase()}})
+
+        //如果有query参数也带过去
+        let location = {name:'search',params:{keyword:this.keyword || undefined}};
+        location.query = this.$route.query;
+        this.$route.push(location);
+      }
     }
   },
 };
