@@ -14,6 +14,6 @@ export const reqCategoryList = () => requests.get('/product/getBaseCategoryList'
 export const reqGetBannerList = () => mockRequests.get('/banner');
 
 
+//获取Floor数据
+export const reqFloorList = () => mockRequests.get('/floor');
 
-
-// 试过了，配置好config重启，就不需要reqCate那里的url带/api，和老师的一样

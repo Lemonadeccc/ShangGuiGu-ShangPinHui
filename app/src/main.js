@@ -15,6 +15,9 @@ import router from '@/router';
 //引入仓库
 import store from '@/store';
 
+//引入swiper样式
+import 'swiper/css/swiper.css';
+
 // //测试
 // console.log("###");
 // import {reqCategoryList} from '@/api';
@@ -30,5 +33,5 @@ new Vue({
   //注册路由信息：当这里书写router的时候，组件身上都拥有$route,$router属性
   router,
   //注册仓库：组件身上会多了一个$store属性
-  store
+  store,
 }).$mount('#app')

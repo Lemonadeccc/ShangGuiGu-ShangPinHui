@@ -100,6 +100,8 @@ export default {
     return {};
   },
 
+  props:['list'],
+
   mounted() {},
 
   methods: {},

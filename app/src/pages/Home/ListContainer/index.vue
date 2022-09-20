@@ -5,8 +5,12 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="(carousel, index) in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -91,7 +95,8 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
+import Swiper from "swiper";
 export default {
   name: "AppIndex",
 
@@ -101,16 +106,100 @@ export default {
 
   mounted() {
     //派发action，通过Vuex发起ajax请求，将数据存储在仓库当中
-    this.$store.dispatch('getBannerList');
+    this.$store.dispatch("getBannerList");
+
+    //在new Swiper实例之前，页面中结构必须有【现在老师把new Swiper实例放在mounted不行】
+    //因为dispatch当中涉及到异步语句，导致v-for遍历的时候结构还没有完全，因此不行
+    // setTimeout(() => {
+    //   var mySwiper = new Swiper(".swiper-container", {
+    //     loop: true, // 循环模式选项
+
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       //点击小球的时候也切换图片
+    //       clickable: true,
+    //     },
+
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+
+    //     // // 如果需要滚动条
+    //     // scrollbar: {
+    //     //   el: ".swiper-scrollbar",
+    //     // },
+    //   });
+    // }, 200);
   },
 
   methods: {},
 
-  computed:{
+  computed: {
     ...mapState({
-      bannerList:state => state.home.bannerList
-    })
-  }
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
+  watch: {
+    //监听bannerList数据的变化，因为这条数据发生过变化---由空数组变为数组里面有四个元素
+    bannerList: {
+      handler(newValue, oldValue) {
+        //现在通过watch监听bannerList属性的属性值的变化
+        //如果执行handler方法，代表组件实例身上这个属性已经有了【数组：四个元素·】
+        //当前这个函数执行，只能保证bannerList数据已经有了，但是没办法保证v-for已经执行结束了
+        //v-for执行完毕，才有结构【现在在watch当中没办法保证的】
+        // var mySwiper = new Swiper(".swiper-container", {
+        //   loop: true, // 循环模式选项
+
+        //   // 如果需要分页器
+        //   pagination: {
+        //     el: ".swiper-pagination",
+        //     //点击小球的时候也切换图片
+        //     clickable: true,
+        //   },
+
+        //   // 如果需要前进后退按钮
+        //   navigation: {
+        //     nextEl: ".swiper-button-next",
+        //     prevEl: ".swiper-button-prev",
+        //   },
+
+        //   // // 如果需要滚动条
+        //   // scrollbar: {
+        //   //   el: ".swiper-scrollbar",
+        //   // },
+        // });
+
+        //nextTick:在下次DOM更新   循环结束之后执行延迟回调，  在修改数据之后立即使用这个方法，获取更新之后的DOM
+        this.$nextTick(() => {
+          //当执行这个回调的时候，保证服务数据回来了,v-for执行完毕了【一定轮播图的结构一定有了】
+          var mySwiper = new Swiper(".swiper-container", {
+          loop: true, // 循环模式选项
+
+          // 如果需要分页器
+          pagination: {
+            el: ".swiper-pagination",
+            //点击小球的时候也切换图片
+            clickable: true,
+          },
+
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+
+          // // 如果需要滚动条
+          // scrollbar: {
+          //   el: ".swiper-scrollbar",
+          // },
+        });
+        })
+      },
+    },
+  },
 };
 </script>
 

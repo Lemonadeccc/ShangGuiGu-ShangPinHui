@@ -6,7 +6,7 @@
         <Recommend/>
         <Rank/>
         <Like/>
-        <Floor/>
+        <Floor v-for="(floor,index) in floorList" :key="floor.id" :list="floor"/>
         <Brand/>
 
 
@@ -46,9 +46,13 @@ export default {
     computed:{
         // // 注意mapState和mapGetters是映射在计算属性里面的，而mapActions和mapMutations是映射在methods里面的
         // ...mapState(['count'])
+        ...mapState({
+            floorList:state => state.home.floorList
+        })
     },
     mounted() {
-        
+        //派发cation 获取floor组件的数据
+        this.$store.dispatch('getFloorList');
     },
 
     methods: {
