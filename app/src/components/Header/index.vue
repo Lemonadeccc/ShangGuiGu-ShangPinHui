@@ -74,7 +74,7 @@ export default {
         //如果有query参数也带过去
         let location = {name:'search',params:{keyword:this.keyword || undefined}};
         location.query = this.$route.query;
-        this.$route.push(location);
+        this.$router.push(location);
       }
     }
   },
