@@ -29,6 +29,10 @@ import 'swiper/css/swiper.css';
 
 // Vue.config.productionTip = false
 
+import {reqGetSearchInfo} from '@/api';
+console.log(reqGetSearchInfo({}));
+
+
 new Vue({
   render: h => h(App),
   //注册路由：底下的写法是KV一致，省略V【router是小写的】

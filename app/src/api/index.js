@@ -32,8 +32,8 @@ export const reqFloorList = () => mockRequests.get('/floor');
 //当前这个函数需不需要接受外部传递参数
 //当前这个接口，给服务器传递参数params，至少是一个空对象
 //当前这个接口（获取搜索模块的数据），给服务器一个默认参数【至少是一个空对象】
-export const reqFetSearchInfo = (params) => ({
+export const reqGetSearchInfo = (params) => ({
     url:"/list",
     method:"post",
     data:params
-})
+});
