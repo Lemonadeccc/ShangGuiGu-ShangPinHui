@@ -557,7 +557,10 @@ export default {
     // this.searchParams.keyword = this.$route.query.keyword;
 
     // Object.assign:ES6新增的语法，合并对象
+    
+    //在的发请求之前，把接口需要传递参数，进行整理（在服务器发请求之前，把参数整理好，服务器就会返回查询的数据）
     Object.assign(this.searchParams,this.$route.query,this.$route.params);
+    console.log('发请求之前',this.searchParams);
   },
   mounted() {
 
@@ -574,8 +577,30 @@ export default {
   },
 
   computed: {
-    ...mapGetters("search", ["goodsList", "trademarkList", "attrsList"]),
+    ...mapGetters(["goodsList", "trademarkList", "attrsList"]),
   },
+  
+  //数据监听：监听组件实例身上的属性的属性值的变化
+  watch:{
+    //监听路由的信息是否发生变化，如果发生变化，再次发起请求
+    $route(newValue,oldValue){
+      //再次发送请求之前整理带给服务器参数
+      Object.assign(this.searchParams,this.$route.query,this.$route.params);
+      // console.log(this.searchParams);
+      //再次发起ajax请求
+      this.getData();
+
+      //每一次请请求完毕，应该吧相应的1、2、3级分类的id制空，让他接受下一次的相应1、2、3级id
+
+      //分类和名字与关键字不用清理，因为每一次路由发生变化的时候，都会给他赋予新的数据。
+      this.searchParams.category1Id = '';
+      this.searchParams.category2Id = '';
+      this.searchParams.category3Id = '';
+
+    }
+  }
+
+
 };
 </script>
 
