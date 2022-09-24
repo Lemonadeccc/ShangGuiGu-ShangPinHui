@@ -4,11 +4,15 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <!-- <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId">
+          <li
+            v-for="(trademark, index) in trademarkList"
+            :key="trademark.tmId"
+            @click="tradeMarkHandler(trademark)"
+          >
             {{ trademark.tmName }}
-          </li> -->
+          </li>
 
-          <li>索尼（SONY）</li>
+          <!-- <li>索尼（SONY）</li>
           <li>TCL</li>
           <li>长虹（CHANGHONG）</li>
           <li>飞利浦（PHILIPS）</li>
@@ -25,7 +29,7 @@
           <li><img src="./images/phone01.png" /></li>
           <li><img src="./images/phone06.png" /></li>
           <li><img src="./images/phone07.png" /></li>
-          <li><img src="./images/phone02.png" /></li>
+          <li><img src="./images/phone02.png" /></li> -->
         </ul>
       </div>
       <div class="ext">
@@ -33,48 +37,27 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
- <!-- <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attrId">
-      <div class="fl key">网络制式</div>
+
+    <!-- 平台售卖属性的地方 -->
+    <div
+      class="type-wrap"
+      v-for="(attr, index) in attrsList"
+      :key="attr.attrId"
+    >
+      <!-- 平台售卖属性：比如说颜色 -->
+      <div class="fl key">{{attrr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-         // <li v-for="(attrValue,index) in attr.attrValueList" :key="index"><a>{{attr.value}}</a></li>
-          <li>
-            <a>GSM（移动/联通2G）</a>
-          </li>
-          <li>
-            <a>电信2G</a>
-          </li>
-          <li>
-            <a>电信3G</a>
-          </li>
-          <li>
-            <a>移动3G</a>
-          </li>
-          <li>
-            <a>联通3G</a>
-          </li>
-          <li>
-            <a>联通4G</a>
-          </li>
-          <li>
-            <a>电信3G</a>
-          </li>
-          <li>
-            <a>移动3G</a>
-          </li>
-          <li>
-            <a>联通3G</a>
-          </li>
-          <li>
-            <a>联通4G</a>
+          <!-- 平台相应售卖的属性的属性值：粉色，蓝色，黑色... -->
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="attrValue" @click="attrInfo(attr,attrValue)">
+            <a>{{ attr.value }}</a>
           </li>
         </ul>
       </div>
       <div class="fl ext"></div>
-    </div> -->
+    </div>
 
-
-    <div class="type-wrap">
+    <!-- <div class="type-wrap">
       <div class="fl key">网络制式</div>
       <div class="fl value">
         <ul class="type-list">
@@ -197,7 +180,7 @@
         </ul>
       </div>
       <div class="fl ext"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -205,6 +188,21 @@
 import { mapGetters } from "vuex";
 export default {
   name: "SearchSelector",
+  methods: {
+    //品牌的事件处理函数
+    tradeMarkHandler(trademark) {
+      //点击了品牌，还是需要整理参数，向服务器发请求获取相应的数据进行展示
+      //在父组件发请求，因为在父组件中SearchParams参数是带给服务器参数，
+      //子组件把你点击的品牌晓得信息，需要给父组件传递过去----用自定义事件
+      this.$emit("trademarkInfo", trademark);
+    },
+
+    // 平台售卖属性值的点击事件
+    attrInfo(attr,attrValue){
+      //["属性ID:属性值:属性名"]
+      this.$emit('attrInfo',attr,attrValue);
+    }
+  },
   computed: {
     ...mapGetters(["trademarkList", "attrsList", "goodsList"]),
   },
