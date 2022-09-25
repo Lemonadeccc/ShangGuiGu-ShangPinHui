@@ -6,6 +6,7 @@ Vue.use(Vuex);
 //引入小仓库
 import home from './home';
 import search from './search';
+import detail from './detail';
 
 
 // //state:仓库储存数据的地方
@@ -45,6 +46,7 @@ export default new Vuex.Store({
     //实现Vuex仓库，模块是开发存储数据
     modules:{
         home,
-        search
+        search,
+        detail
     }
 });

@@ -72,9 +72,11 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img src="./images/mobile01.png"
-                    /></a>
+                    <!-- 在路由跳转的时候切记别忘记带id(params参数) -->
+                    <router-link :to="`/detail/${good.id}`">
+                      <img :src="good.defaultImg"/>
+                    </router-link>
+                    
                   </div>
                   <div class="price">
                     <strong>
@@ -140,7 +142,7 @@ export default {
         //分页器用的，代表当前是第几页
         pageNo: 1,
         //代表每一页展示数据的个数
-        pageSize: 10,
+        pageSize: 3,
         //平台售卖属性带的参数
         props: [],
         //品牌
