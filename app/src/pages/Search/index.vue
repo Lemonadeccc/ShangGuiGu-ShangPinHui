@@ -52,10 +52,10 @@
             <div class="navbar-inner filter">
               <!-- 价格结构  排序的结构 -->
               <ul class="sui-nav">
-                <li :class="{active:isOne}" @click="changeOrder">
+                <li :class="{active:isOne}" @click="changeOrder('1')">
                   <a>综合<span v-show="isOne" class="iconfont" :class="{'icon-caret-up':isAsc,'icon-caret-down':Desc}"></span></a>
                 </li>
-                <li :class="{active:isTwo}" @click="changeOrder">
+                <li :class="{active:isTwo}" @click="changeOrder('2')">
                   <a>价格<span v-show="isTwo" class="iconfont" :class="{'icon-caret-up':isAsc,'icon-caret-down':Desc}"></span></a>
                 </li>
               </ul>
@@ -108,36 +108,8 @@
               </li>
             </ul>
           </div>
-          <!-- 分页器  -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页器:测试分页器阶段，这里的数据将来需要替换的。  -->
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" total="total" continues="5" @getPageNo="getPageNo"/>
         </div>
       </div>
     </div>
@@ -146,7 +118,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import { mapGetters } from "vuex";
+import { mapGetters,mapState } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -163,7 +135,7 @@ export default {
         categoryName: "",
         //关键字
         keyword: "",
-        //排序：初始的状态应该是综合|降序
+        //排序：初始的状态应该是综合且降序
         order: "1:desc",
         //分页器用的，代表当前是第几页
         pageNo: 1,
@@ -282,8 +254,32 @@ export default {
     },
 
     //排序的操作
-    changeOrder(){
-      
+    changeOrder(flag){
+      //flag形参：它是一个标记，代表用户点击的事综合（1）价格（2）[用户点击的时候传递进来的]
+      let originOrder = this.searchParams.order;
+      //这里获取到的事最开始的状态
+      let originFlag = this.searchParams.order.split(':')[0];
+      let originSort = this.searchParams.order.split(':')[1];
+      //准备一个新的order属性值    
+      if(flag == originFlag){
+        //确定点击的一定是综合
+        newOrder = `${originFlag}:${originSort == 'desc' ? 'asc' : 'desc'}`;
+      }else{
+        //点击的是价格
+        newOrder = `${flag}:${'desc'}`;
+      }
+      //将新的order服务searchParams
+      this.searchParams.order = newOrder;
+      //再次发请求
+      this.getData();
+    },
+
+    //这是自定义事件的回调函数---获取当前第几页
+    getPageNo(pageNo){
+      //整理带给服务器的参数
+      this.searchParams.pageNo = pageNo;
+      //再次发送请求
+      this.getData();
     }
 
   },
@@ -301,7 +297,11 @@ export default {
     },
     isDesc(){
       return searchParams.order.indexOf('desc') != -1
-    }
+    },
+    //获取search模块展示产品一共多少数据
+    ...mapState({
+      total:state => state.search.searchList.total
+    })
   },
 
   //数据监听：监听组件实例身上的属性的属性值的变化
