@@ -16,9 +16,9 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :skuImageList="skuInfo.skuImageList"/>
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :skuImageList="skuInfo.skuImageList"/>
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -63,11 +63,9 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
+              <dl v-for="(spuSaleAttr,index) in spuSaleAttrList" :key="spuSaleAttr.id">
+                <dt class="title">{{spuSaleAttr.saleAttrName}}</dt>
+                <dd changepirce="0" @click="changeActive(spuSaleAttrValue,spuSaleAttrValueList)" :class="{active:spuSaleAttrValue.isChecked == '1'}" v-for="(spuSaleAttrValue,index) in spuSaleAttr.spuSaleAttrValueList" :key="spuSaleAttrValue.id">{{spuSaleAttrValue.saleAttrValueName}}</dd>
               </dl>
               <dl>
                 <dt class="title">内存容量</dt>
@@ -358,13 +356,31 @@
       Zoom
     },
 
+    methods:{
+      //产品的售卖属性值切换高亮
+      changeActive(spuSaleAttrValue,arr){
+        //遍历全部售卖属性值isCkecked为零没有高亮了
+        arr.forEach(item => {
+          item.isChecked = '0';
+        })
+        //点击的那个售卖属性值
+        spuSaleAttrValue.isChecked = '1';
+      }
+    },
+
     mounted(){
       //派发aciton获取产品详情的信息
       this.$store.dispatch('getGoodInfo',this.$route.params.skuid);
     },
 
 computed:{
-  ...mapGetters(['categoryView','skuInfo']),
+  ...mapGetters(['categoryView','skuInfo','spuSaleAttrList']),
+
+  //给子组件的数据
+  skuImageList(){
+    //如果服务器数据没有回来，skuInfo这个对象是空对象
+    return this.skuInfo.skuImageList || [];
+  }
 }
 
   }

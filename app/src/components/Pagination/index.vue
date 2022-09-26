@@ -21,6 +21,7 @@
 export default {
   name: "Pagination",
 
+  //父组件传递给字符串的数据：当前页，每一页展示多少条数据、数据总个数、连续页码数
   props: ["pageNo", "pageSize", "total", "continues"],
 
   computed: {
@@ -31,6 +32,7 @@ export default {
     },
     //计算出连续的页码的起始数字与结束数字[连续页码数字：至少是5]
     startNumAndEndNum() {
+      //解构出连续的页码数、当前页码、总页数
       const { continues, pageNo, totalPage } = this;
       //先定义两个变量存储起始数字与结束数字
       let start = 0,

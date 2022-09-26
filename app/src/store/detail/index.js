@@ -20,15 +20,23 @@ const actions = {
 
 //简化数据而生
 const getters = {
+  //路径导航
     categoryView(state){
         //比如：state.goodInfo初始状态空对象，空对象categoryView属性值Undefined,undefined||{}返回为{}
         //当前计算出来的categoryView属性值至少是一个空对象，假的报错不会有了。
         return state.goodInfo.categoryView || {};
     },
 
+    //简化产品信息的数组
     skuInfo(state){
         return state.goodInfo.skuInfo || {};
+    },
+
+    //产品的售卖属性的简化
+    spuSaleAttrList(state){
+      return state.goodInfo.spuSaleAttrList || [];
     }
+
 };
 
 export default {
