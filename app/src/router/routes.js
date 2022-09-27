@@ -5,9 +5,16 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Detail from "@/pages/Detail";
 import AddCartSuccess from "@/pages/AddCartSuccess";
+import ShopCart from '@/pages/ShopCart';
 
 //路由配置信息
 export default [
+  {
+    path: "/shopcart",
+    component: ShopCart,
+    //显示footer
+    meta: { show: true },
+  },
   {
     path: "/addcartsuccess",
     name:'addcartsuccess',
