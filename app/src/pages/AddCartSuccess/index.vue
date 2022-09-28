@@ -14,7 +14,7 @@
         </div>
         <div class="right-gocart">
           <router-link class="sui-btn btn-xlarge" :to="`/detail/${skuInfo.id}`"></router-link>
-          <a href="javascript:" >去购物车结算 > </a>
+          <router-link to="/shopcart">去购物车结算</router-link>
         </div>
       </div>
     </div>
@@ -23,7 +23,6 @@
 
 <script>
   export default {
-    name: 'AddCartSuccess',
 
     computed:{
       skuInfo(){
