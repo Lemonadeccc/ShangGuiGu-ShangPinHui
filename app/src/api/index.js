@@ -55,3 +55,26 @@ export const reqAddOrUpdateShopCart = (skuId,skuNum) => requests({
 //获取购物车列表数据接口
 ///api/cart/cartList   get
 export const reqCartList = () => requests({url:'/cart/cartList',method:'get'})
+
+
+//删除购物车产品的接口
+//url:/api/cart/deleteCart/{skuId} method:delete
+export const reqDeleteCartById = (skuId) => requests({
+    url:`/api/cart/deleteCart/${skuId}`,
+    method:'delete'
+})
+
+//修改商品的选中状态
+//url:/api/cart/checkCart/{skuId}/{isChecked} method:get
+export const reqUpdateCheckedById = (skuId,isChecked) => requests({
+    url:`/cart/checkCart/${skuId}/${isChecked}`,
+    method:'get'
+})
+
+
+//获取验证码
+// url:/api/user/passport/sendCode/{phone}  method:get
+export const reqGetCode = (phone) => requests({
+    url:`/user/passport/sendCode/${phone}`,
+    method:'get',
+})
