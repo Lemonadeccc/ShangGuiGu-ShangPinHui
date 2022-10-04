@@ -14,14 +14,14 @@
           </ul>
 
           <div class="content">
-            <form action="##">
+            <form>
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号">
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone">
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码">
+                <input type="text" placeholder="请输入密码" v-model="password">
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -30,7 +30,8 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <!-- click事件绑在form上，然后click.prevent='userLogin -->
+              <button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -68,6 +69,33 @@
 <script>
   export default {
     name: 'Login',
+
+    data() {
+      return {
+        phone:'',
+        password:'',
+        
+      };
+    },
+
+    methods:{
+      //登录的回调函数
+      async userLogin(){
+        
+        try {
+          //登录成功
+          const {phone,password} = this;
+          ( phone && password ) && await this.$store.dispatch('userLogin',{phone,password});
+          //跳转到home首页
+          this.$router.push('/home');
+        } catch (error) {
+          alert(error.message);
+          // 都是promise的解决方案，then是链式编程，async await是es7在then方法上再次封装
+          //回调地域最显著的特点就是代码不断向前推进，你套一万个then，代码都无法向前推进
+          //这里啥也不输入也会跳转的，所以需要在加一个判断，判断phone&&password是否为false，如果是，则手动抛错误throw，如果不是false，则进行跳转
+        }
+      }
+    }
   }
 </script> 
 
