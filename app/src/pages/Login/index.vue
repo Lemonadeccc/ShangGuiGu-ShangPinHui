@@ -86,8 +86,10 @@
           //登录成功
           const {phone,password} = this;
           ( phone && password ) && await this.$store.dispatch('userLogin',{phone,password});
-          //跳转到home首页
-          this.$router.push('/home');
+          
+          //登录的路由组件：看路由当中是否包含query参数，有：跳到query参数指定路由，没有：跳到home
+          let toPath = this.$route.query.redirect || '/home'
+          this.$router.push(toPath);
         } catch (error) {
           alert(error.message);
           // 都是promise的解决方案，then是链式编程，async await是es7在then方法上再次封装

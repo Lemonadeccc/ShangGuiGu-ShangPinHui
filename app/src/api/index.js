@@ -140,7 +140,14 @@ export const reqPayInfo = (orderId) => requests({
 
 //查询订单状态
 //url:/api/payment/weixin/queryPayStatus/{orderId} method:get
-export const reqPayStatus = requests({
+export const reqPayStatus = (orderId) => requests({
     url:`/payment/weixin/queryPayStatus/${orderId}`,
+    method:'get'
+})
+
+//获取我的订单列表
+//url:/api/order/auth/{page}/{limit} method:get
+export const reqMyOrderList = (page,limit) => requests({
+    url:`/order/auth/${page}/${limit}`,
     method:'get'
 })

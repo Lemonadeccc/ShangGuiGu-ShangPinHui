@@ -95,17 +95,16 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
+import QRCode from "qrcode";
 export default {
   name: "Pay",
 
   data() {
     return {
       payInfo: {},
-      timer:null,
+      timer: null,
       //支付状态买
-      code:'',
-
+      code: "",
     };
   },
 
@@ -125,32 +124,55 @@ export default {
       }
     },
 
-//出现在左下角的在main.js 中 import 'element-ui/lib/theme-chalk/index.css'
     //遮罩层，弹出框
     async open() {
       //生成二维码(地址)
       let url = await QRCode.toDataURL(this.payInfo.codeUrl);
       this.$alert(`<img src=${url} />`, "请你微信支付", {
         dangerouslyUseHTMLString: true,
-        center:true,
+        center: true,
         //是否显示取消按钮
-        showCancelButton:true,
+        showCancelButton: true,
         //取消按钮的文本内容
-        cacelButtonText:'支付遇见问题',
+        cacelButtonText: "支付遇见问题",
         //确定按钮的文本
-        confirmButtonText:'已支付成功',
+        confirmButtonText: "已支付成功",
         //取消右上角的×
-        showClose:fasle,
+        showClose: fasle,
+        //关闭弹出框的配置值
+        beforeClose: (type, instance, done) => {
+          //type：可以区分取消还是确定按钮
+          //instance:当前组件实例
+          //done:关闭弹出框的方法
+          if (type == "cancel") {
+            alert("请联系管理员浩哥");
+            //清除定时器
+            clearInterval(this.timer);
+            this.timer = null;
+            //关闭弹出框
+            done();
+          } else {
+            //判断是否真的支付了
+            //开发人员为了自己方便，if的条件先注销了
+            if (this.code == 200) {
+              clearInterval(this.timer);
+              this.timer = null;
+              done();
+              //跳转到下一路由
+              this.$router.push("/paysuccess");
+            }
+          }
+        },
       });
       //你需要知道支付成功|失败
       //支付成功，路由的跳转。如果失败，提示信息
       //定时器没有，开启一个新的定时器
-      if(!this.timer){
+      if (!this.timer) {
         this.timer = setInterval(() => {
           //发请求获取用户支付状态 ,,,,这里应该加await不过加了以后和视频不一样，而且这里加了出错
           let result = this.$API.reqPayStatus(this.orderId);
           //如果result.code==200
-          if(result.code == 200){
+          if (result.code == 200) {
             //第一步：清除定时器
             clearInterval(this.timer);
             this.timer = null;
@@ -159,9 +181,9 @@ export default {
             //关闭弹出框
             this.$msgbox.close();
             //跳转到下一路由
-            this.$router.push('/paysuccess');
+            this.$router.push("/paysuccess");
           }
-        },1000);
+        }, 1000);
       }
     },
   },
