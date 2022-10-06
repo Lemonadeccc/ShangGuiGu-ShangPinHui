@@ -122,3 +122,25 @@ export const reqOrderInfo = () => requests({
     url:'/order/auth/trade',
     method:'get'
 })
+
+//提交订单的接口
+//url:/api/order/auth/submitOrder?tradeNo={tradeNo}  method:post
+export const reqSubmitOrder = (tradeNo,data) => requests({
+    url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    data,
+    method:'post',
+})
+
+//获取支付信息
+//url:/api/payment/weixin/createNative/{orderId} method:get
+export const reqPayInfo = (orderId) => requests({
+    url:`payment/weixin/createNative/${orderId}`,
+    method:'get'
+})
+
+//查询订单状态
+//url:/api/payment/weixin/queryPayStatus/{orderId} method:get
+export const reqPayStatus = requests({
+    url:`/payment/weixin/queryPayStatus/${orderId}`,
+    method:'get'
+})

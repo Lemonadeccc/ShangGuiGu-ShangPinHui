@@ -4,6 +4,15 @@ import App from './App.vue'
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';
 import Pagination from '@/components/Pagination';
+
+
+import { Button,MessageBox } from 'element-ui';
+//注册全局组件
+Vue.component(Button.name,Button);
+//ElementUI注册组件的时候，还有一种写法，挂载原型上。
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+
 //第一个参数：全局组件的名字 第二个参数：哪一个组件
 Vue.component(TypeNav.name,TypeNav);
 Vue.component(Carousel.name,Carousel);
@@ -35,6 +44,9 @@ import {reqGetSearchInfo} from '@/api';
 console.log(reqGetSearchInfo({}));
 
 
+//统一接口api文件夹里面全部请求函数
+import * as API from '@/api';
+//统一引入
 new Vue({
   render: h => h(App),
 
@@ -42,6 +54,8 @@ new Vue({
   beforeCreate(){
     //this是Vm
     Vue.prototype.$bus = this;
+
+    Vue.prototype.$API = API;
   },
 
   //注册路由：底下的写法是KV一致，省略V【router是小写的】
