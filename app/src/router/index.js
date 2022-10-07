@@ -81,7 +81,7 @@ router.beforeEach(async (to,from,next) => {
       if(name){
         next();
       }else{
-        //登录了但是没有用户信息,派发aciton让仓库存储用户信息再跳转
+        //登录了但是没有用户信息,派发action让仓库存储用户信息再跳转
         try {
           //获取用户信息成功
           await store.dispatch('getUserInfo');

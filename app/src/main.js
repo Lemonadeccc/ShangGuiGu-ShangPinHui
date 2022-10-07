@@ -46,6 +46,26 @@ console.log(reqGetSearchInfo({}));
 
 //统一接口api文件夹里面全部请求函数
 import * as API from '@/api';
+
+import atm from "@/assets/1.gif"
+//引入插件
+import VueLazyload from 'vue-lazyload'
+//注册插件
+Vue.use(VueLazyload,{
+  //懒加载默认的图片
+  loading:atm
+});
+
+//引入自定义插件
+import myPlugins from './plugins/myPlugins';
+Vue.use(myPlugins,{
+  name:'upper'
+});
+
+
+//引入表单校验插件
+import '@/plugins/validate';
+
 //统一引入
 new Vue({
   render: h => h(App),

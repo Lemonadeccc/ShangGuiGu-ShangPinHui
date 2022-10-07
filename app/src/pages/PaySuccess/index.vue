@@ -20,6 +20,26 @@
 <script>
   export default {
     name: 'PaySuccess',
+
+    //组件内守卫
+    beforeRouteEnter (to, from, next) {
+      //在渲染该组件的对应路由被确认之前调用，不能用this，不能获取组件实例，组件实例还没有创建
+      if(from.path == "/pay"){
+        next();
+      }else{
+        next(false);
+      }
+    },
+
+    beforeRouteUpdate(to,from,next){
+      //复用而且传动态参数的路径   的时候才会调用，可以用this
+    },
+
+    beforeRouteLeave (to, from, next) {
+       //导航离开组件的对应路由时调用
+       //可以访问组件实例‘this’
+       next();
+    },
   }
 </script>
 

@@ -38,14 +38,14 @@ export const reqGetSearchInfo = (params) => requests({
     data:params
 });
 
-//获取产品详情信息的接口 URL:/api/item/{ skuId }  方式：get 参数:skuid
+//获取产品详情信息的接口 URL:/api/item/{ skuId }  方式：get 参数:skuId
 export const reqGoodsInfo = (skuId) => requests({
     url:`/item/${skuId}`,
     method:'get',
 })
 
 //将产品添加到购物车中（获取更新某一个产品的个数）
-///api/cart/addToCart/{ skuId }/{ skuNum }  psot
+///api/cart/addToCart/{ skuId }/{ skuNum }  post
 export const reqAddOrUpdateShopCart = (skuId,skuNum) => requests({
     url:`/api/cart/addToCart/${skuId}/${skuNum}`,
     method:'post',
@@ -103,14 +103,14 @@ export const reqUserInfo = () => requests({
 })
 
 //退出登录
-//url:/api/user/passport/logout meothd:get
+//url:/api/user/passport/logout method:get
 export const reqLogout = () => requests({
     url:'/user/passport/logout',
     method:'get'
 })
 
 //获取用户地址信息
-//url:/api/user/userAddress/auth/findUserAddressList mehtod:get
+//url:/api/user/userAddress/auth/findUserAddressList method:get
 export const reqAddressInfo = () => requests({
     url:'/user/userAddress/auth/findUserAddressList',
     method:'get'

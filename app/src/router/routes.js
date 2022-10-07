@@ -1,6 +1,4 @@
 //引入路由组件
-import Home from "@/pages/Home";
-import Search from "@/pages/Search";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Detail from "@/pages/Detail";
@@ -15,6 +13,13 @@ import Center from '@/pages/Center';
 import MyOrder from '@/pages/Center/myOrder';
 import GroupOrder from '@/pages/Center/groupOrder';
 
+
+/*
+当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。
+如果我们能把不同路由对应的
+组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了。
+*/ 
+
 //路由配置信息
 export default [
   {
@@ -25,7 +30,7 @@ export default [
     //二级路由组件
     children:[
       {
-        path:"myoreder",
+        path:"myorder",
         component:MyOrder,
       },
       {
@@ -49,12 +54,29 @@ export default [
     component: Pay,
     //显示footer
     meta: { show: true },
+    beforeEnter: (to, from, next) => {
+      if(from.path == "/trade"){
+        next();
+      }else{
+        next(false);
+      }
+    }
   },
   {
     path: "/trade",
     component: Trade,
     //显示footer
     meta: { show: true },
+    //路由独享守卫
+    beforeEnter: (to, from, next) => {
+      //去交易页面，必须是从购物车而来
+      if(from.path == "/shopcart"){
+        next();
+      }else{
+        //其他的路由践而来，停留在当前。
+        next(false);
+      }
+    }
   },
   {
     path: "/shopcart",
@@ -76,12 +98,12 @@ export default [
   },
   {
     path: "/home",
-    component: Home,
+    component: () => import("@/pages/Home"),
     meta: { show: true },
   },
   {
     path: "/search:keyword?",
-    component: Search,
+    component: () => import("@/pages/Search"),
     meta: { show: true },
     name: "search",
     //路由组件能不能传递props
